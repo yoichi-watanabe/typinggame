@@ -10,20 +10,28 @@ import (
 	"time"
 )
 
-func input(r io.Reader) <-chan string {
-	// TODO: チャネルを作る
-	ch := make(chan string)
+var correct int
+
+func input(r io.Reader) {
 
 	go func() {
 		s := bufio.NewScanner(r)
+		var question string
+		var answer string
+
 		for s.Scan() {
-			ch <- s.Text()
+
+			// 正解数をインクリメント
+			answer = s.Text()
+			if question == answer {
+				correct++
+			}
+			question = output()
+
+			fmt.Println(question)
+			fmt.Print(">")
 		}
-		// TODO: チャネルを閉じる
-		close(ch)
 	}()
-	// TODO: チャネルを返す
-	return ch
 }
 
 // 標準出力に英単語を出す
@@ -49,18 +57,14 @@ func output() string {
 }
 
 func main() {
-	ch := input(os.Stdin)
-	var correct int
 
-	for {
-		question := output()
-		fmt.Println(question)
-		fmt.Print(">")
+	correct = -1
+	fmt.Println("制限時間は30秒です。Enter を押すと開始します。")
 
-		// 正解数をインクリメント
-		if question == <-ch {
-			correct++
-			fmt.Println(correct)
-		}
-	}
+	input(os.Stdin)
+
+	time.Sleep(time.Second * 30)
+
+	fmt.Println("★★★TIME UP★★★")
+	fmt.Println(correct)
 }
