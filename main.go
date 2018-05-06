@@ -66,5 +66,6 @@ func main() {
 	time.Sleep(time.Second * 30)
 
 	fmt.Println("★★★TIME UP★★★")
+	fmt.Print("合計性回数 : ")
 	fmt.Println(correct)
 }
