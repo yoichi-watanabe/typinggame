@@ -2,9 +2,12 @@ package main
 
 import (
 	"bufio"
+	"encoding/csv"
 	"fmt"
 	"io"
+	"math/rand"
 	"os"
+	"time"
 )
 
 func input(r io.Reader) <-chan string {
@@ -23,10 +26,32 @@ func input(r io.Reader) <-chan string {
 	return ch
 }
 
+// 標準出力に英単語を出す
+func output() string {
+
+	// 読み込み用にファイルを開く
+	dictCsv, err := os.Open("./dict.csv")
+	if err != nil {
+		//return err
+		fmt.Println(err)
+	}
+	// 関数終了時に閉じる
+	defer dictCsv.Close()
+
+	// csv英単語辞書データを読み込み
+	r := csv.NewReader(dictCsv)
+	rows, err := r.ReadAll()
+
+	// 乱数を設定し、辞書データ内のランダムな値を返却する
+	rand.Seed(time.Now().UnixNano())
+	randomInt := rand.Intn(len(rows[0]))
+	return rows[0][randomInt]
+}
+
 func main() {
 	ch := input(os.Stdin)
 	for {
-		fmt.Println("aiueo")
+		fmt.Println(output())
 		fmt.Print(">")
 		fmt.Println(<-ch)
 	}
