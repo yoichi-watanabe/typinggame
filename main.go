@@ -50,9 +50,17 @@ func output() string {
 
 func main() {
 	ch := input(os.Stdin)
+	var correct int
+
 	for {
-		fmt.Println(output())
+		question := output()
+		fmt.Println(question)
 		fmt.Print(">")
-		fmt.Println(<-ch)
+
+		// 正解数をインクリメント
+		if question == <-ch {
+			correct++
+			fmt.Println(correct)
+		}
 	}
 }
